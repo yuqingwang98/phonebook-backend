@@ -7,6 +7,8 @@ app.use(express.json())
 
 app.use(cors())
 
+app.use(express.static('build'))
+
 // return json string of body when the method is post
 morgan.token("data", (request) => {
   return request.method === "POST" ? JSON.stringify(request.body) : " ";
