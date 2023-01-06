@@ -4,6 +4,7 @@ const morgan = require("morgan");
 
 app.use(express.json())
 
+// return json string of body when the method is post
 morgan.token("data", (request) => {
   return request.method === "POST" ? JSON.stringify(request.body) : " ";
 });
