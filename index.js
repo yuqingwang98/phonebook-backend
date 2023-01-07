@@ -58,7 +58,7 @@ app.delete('/api/persons/:id', (request, response, next) => {
     .catch(error => next(error))
 })
 
-app.post('/api/persons', (request, response) => {
+app.post('/api/persons', (request, response, next) => {
   const body = request.body
 
   if (!body.name) {
@@ -84,6 +84,22 @@ app.post('/api/persons', (request, response) => {
     response.json(savedAndFormattedNote)
   })
   .catch(error => next(error))
+})
+
+app.put('/api/persons/:id', (req, res, next) => {
+  const { body } = req
+  const { id } = req.params
+
+  const person = {
+    name: body.name,
+    number: body.number,
+  }
+
+  Person.findByIdAndUpdate(id, person, { new: true })
+    .then((updatedPerson) => {
+      res.json(updatedPerson.toJSON())
+    })
+    .catch((error) => next(error))
 })
 
 const unknownEndpoint = (request, response) => {
