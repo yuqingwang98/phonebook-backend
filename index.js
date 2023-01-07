@@ -6,12 +6,9 @@ const cors = require('cors')
 const Person = require('./models/person')
 const app = express()
 
-
-app.use(express.json())
-
 app.use(cors())
-
 app.use(express.static('build'))
+app.use(express.json())
 
 // return json string of body when the method is post
 morgan.token("data", (request) => {
@@ -54,7 +51,7 @@ app.get('/api/persons/:id', (request, response) => {
 
 app.delete('/api/persons/:id', (request, response, next) => {
   Person
-    .findOneAndDelete({ id: request.params.id })
+    .findByIdAndRemove(request.params.id)
     .then(result => {
       response.status(204).end()
     })
@@ -88,6 +85,25 @@ app.post('/api/persons', (request, response) => {
   })
   .catch(error => next(error))
 })
+
+const unknownEndpoint = (request, response) => {
+  response.status(404).send({ error: 'unknown endpoint' })
+}
+
+app.use(unknownEndpoint)
+
+const errorHandler = (error, request, response, next) => {
+  console.error(error.message)
+
+  if (error.name === 'CastError') {
+    return response.status(400).send({ error: 'malformatted id' })
+  }
+
+  next(error)
+}
+
+app.use(errorHandler)
+
 
 const PORT = process.env.PORT
 app.listen(PORT, () => {
