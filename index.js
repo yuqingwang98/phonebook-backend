@@ -1,7 +1,7 @@
 require('dotenv').config()
 
 const express = require('express')
-const morgan = require("morgan");
+const morgan = require('morgan')
 const cors = require('cors')
 const Person = require('./models/person')
 const app = express()
@@ -11,13 +11,13 @@ app.use(express.static('build'))
 app.use(express.json())
 
 // return json string of body when the method is post
-morgan.token("data", (request) => {
-  return request.method === "POST" ? JSON.stringify(request.body) : " ";
-});
+morgan.token('data', (request) => {
+  return request.method === 'POST' ? JSON.stringify(request.body) : ' '
+})
 
 app.use(
-  morgan(":method :url :status :res[content-length] - :response-time ms :data")
-);
+  morgan(':method :url :status :res[content-length] - :response-time ms :data')
+)
 
 app.get('/api/persons', (request, response) => {
   Person
@@ -28,9 +28,9 @@ app.get('/api/persons', (request, response) => {
 })
 
 app.get('/info', (request, response) => {
-  const currentDate = new Date().toLocaleString();
-  const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-  response.send(`<p>Phonebook has info for ${persons.length} people</p>
+  const currentDate = new Date().toLocaleString()
+  const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
+  response.send(`<p>Phonebook has info for ${Person.length} people</p>
   <p>${currentDate} (${timeZone})</p>`)
 })
 
@@ -52,9 +52,9 @@ app.get('/api/persons/:id', (request, response) => {
 app.delete('/api/persons/:id', (request, response, next) => {
   Person
     .findByIdAndRemove(request.params.id)
-    .then(result => {
+    .then(
       response.status(204).end()
-    })
+    )
     .catch(error => next(error))
 })
 
@@ -78,12 +78,12 @@ app.post('/api/persons', (request, response, next) => {
   })
 
   person
-  .save()
-  .then(savedPerson => savedPerson.toJSON())
-  .then(savedAndFormattedNote => {
-    response.json(savedAndFormattedNote)
-  })
-  .catch(error => next(error))
+    .save()
+    .then(savedPerson => savedPerson.toJSON())
+    .then(savedAndFormattedNote => {
+      response.json(savedAndFormattedNote)
+    })
+    .catch(error => next(error))
 })
 
 app.put('/api/persons/:id', (req, res, next) => {
