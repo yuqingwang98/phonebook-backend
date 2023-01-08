@@ -1,6 +1,6 @@
-# fly.toml file generated for notes-fly-app on 2023-01-06T14:26:09Z
+# fly.toml file generated for floral-water-1453 on 2023-01-08T00:09:18Z
 
-app = "notes-fly-app"
+app = "floral-water-1453"
 kill_signal = "SIGINT"
 kill_timeout = 5
 processes = []
